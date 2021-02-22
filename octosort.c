@@ -714,7 +714,6 @@ void FUNC(octosort)(VAR array[], size_t size, VAR *external_cache, size_t cache_
 		// the minimum stack size is typically 8192 KB, so 512 elements should fit comfortably
 		// removing the cache entirely gives 60% of the performance of qsort()
 
-
 		if (cache == NULL)
 		{
 			cache = stack_cache;
@@ -727,12 +726,14 @@ void FUNC(octosort)(VAR array[], size_t size, VAR *external_cache, size_t cache_
 
 	if (size <= 8)
 	{
-		return FUNC(monobound_sort)(array, new_range(0, size), cmp);
+		FUNC(monobound_sort)(array, new_range(0, size), cmp);
+
+		goto End;
 	}
 
 	WikiIterator iterator = WikiIterator_new(size, 4);
 
-	VAR *ptz = NULL;
+	VAR *pto = NULL;
 
 	// sort groups of 4-8 items at a time
 
@@ -740,32 +741,32 @@ void FUNC(octosort)(VAR array[], size_t size, VAR *external_cache, size_t cache_
 	{
 		Range range = WikiIterator_nextRange(&iterator);
 
-		ptz = FUNC(octo_swap)(array, ptz, range.start, range.end - range.start, cmp);
+		pto = FUNC(octo_swap)(array, pto, range.start, range.end - range.start, cmp);
 	}
 
-	if (ptz)
+	if (pto)
 	{
-		VAR *pta = array + size;
+		VAR *pta = array + size - 1;
+		VAR *ptz = pto;
 
 		do
 		{
 			swap = *ptz;
-			*ptz++ = *--pta;
+			*ptz = *pta;
 			*pta = swap;
 		}
-		while (ptz < pta);
+		while (++ptz < --pta);
 
-		if (ptz == array)
+		if (pto == array)
 		{
-			printf("!");
-			return;
+			goto End;
 		}
 	}
 
 	// then merge sort the higher levels, which can be 8-15, 16-31, 32-63, 64-127, etc.
+
 	while (1)
 	{
-
 		// if every A and B block will fit into the cache, use a special branch specifically for merging with the cache
 		// (we use < rather than <= since the block size might be one more than iterator.length())
 		if (WikiIterator_length(&iterator) < cache_size)
@@ -1345,10 +1346,16 @@ void FUNC(octosort)(VAR array[], size_t size, VAR *external_cache, size_t cache_
 		}
 	}
 
+	End:
+
 	#if DYNAMIC_CACHE
-		if (cache != external_cache)
-		{
-			free(cache);
-		}
+
+	if (cache != external_cache)
+	{
+		free(cache);
+	}
+
 	#endif
+
+	return;
 }
