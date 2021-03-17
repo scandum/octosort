@@ -12,7 +12,7 @@ WikiSort's binary search has been replaced with a [monobound binary search](http
 
 Gries-Mills rotation
 --------------------
-WikiSort's triple reverse rotation has been replaced with a Gries-Mills rotation, which is up to two times faster.
+WikiSort's triple reversal rotation has been replaced with a Gries-Mills rotation, which is up to two times faster.
 
 Quad merge
 ----------
