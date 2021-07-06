@@ -32,7 +32,7 @@ The interface was changed to use the same one as qsort, which is described in [m
 
 Memory
 ------
-By default octosort uses 512 elements worth of stack memory. The minimimum stack size on modern systems should be around 8192 KB. Octosort can be configured to use n / 2 memory with a fallback to the stack.
+By default octosort uses 512 elements worth of stack memory. Octosort can be configured to use n / 2 memory with a fallback to the stack.
 
 Big O
 -----
