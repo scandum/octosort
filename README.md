@@ -1,6 +1,6 @@
 Origin
 ------
-Octosort is based on [WikiSort](https://github.com/BonzaiThePenguin/WikiSort) and [quadsort](https://github.com/scandum/quadsort). This document primarily lists notable differences and some benchmarks.
+Octosort is a block merge sort based on [WikiSort](https://github.com/BonzaiThePenguin/WikiSort) and [quadsort](https://github.com/scandum/quadsort). This document primarily lists notable differences and some benchmarks.
 
 Octo swap
 ---------
@@ -20,7 +20,7 @@ WikiSort already implemented a quad merge, which has been updated to no longer d
 
 Tail merge
 ----------
-Quadsort's tail merge routine was added to perform partially in place merges.
+Quadsort's tail merge routine was added to perform partially in-place merges.
 
 Data Types
 ----------
@@ -32,7 +32,9 @@ The interface was changed to use the same one as qsort, which is described in [m
 
 Memory
 ------
-By default octosort uses 512 elements worth of stack memory. Octosort can be configured to use n / 2 memory with a fallback to the stack.
+By default octosort uses 512 elements worth of stack memory.
+
+The minimum memory requirement for octosort is 1 element of stack memory, it can be configured to use n / 2 memory.
 
 Big O
 -----
